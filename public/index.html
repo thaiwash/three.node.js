@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hello world</title>
+   </head>
+   <script src = "/socket.io/socket.io.js"></script>
+   
+   <script>
+		var pngImage = new Image();
+	  function initSocket() {
+		  
+		  const socket = io();
+		  var cnt = 0;
+		  socket.on("img", function(data) {
+			//console.log(data) 
+			cnt ++
+			pngImage.src=data.base64
+			socket.emit("getImg")
+		  })
+		  socket.emit("getImg")
+		  setInterval(function() {
+			console.log(cnt)
+			cnt = 0
+		  }, 1000)
+	  }
+	  
+	  function init() {
+		img = document.getElementById("display");
+		//img = document.createElement("IMG");
+				
+		var canvas = document.getElementById("c");
+		var ctx = canvas.getContext("2d");
+
+		console.log(pngImage)
+		pngImage.onload = function() {
+		  ctx.drawImage(pngImage, 0, 0);
+		};
+		pngImage.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9oMCRUiMrIBQVkAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAADElEQVQI12NgoC4AAABQAAEiE+h1AAAAAElFTkSuQmCC";
+		//ctx.drawImage(image, 0, 0);
+		initSocket()
+	  }
+
+   </script>
+   <body onload="init()"><canvas id="c"></body>
+</html>
